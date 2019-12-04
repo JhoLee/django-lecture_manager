@@ -10,9 +10,9 @@ class Role(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.PROTECT)
-    id_number = models.IntegerField(unique=True)
-    name = models.CharField(max_length=100)
-    role = models.ForeignKey(Role, on_delete=models.SET_DEFAULT, default="unknown")
+    id_number = models.IntegerField(blank=True)
+    name = models.CharField(blank=True, max_length=100)
+    role = models.ForeignKey(Role,  on_delete=models.SET_DEFAULT, default=None)
 
 
 @receiver(post_save, sender=User)
