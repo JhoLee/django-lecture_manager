@@ -7,6 +7,9 @@ from django.dispatch import receiver
 class Role(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -14,11 +17,19 @@ class Profile(models.Model):
     name = models.CharField(blank=True, max_length=100)
     role = models.ForeignKey(Role,  on_delete=models.SET_NULL, null=True)
 
+    def __str__(self):
+        return "{role}/{id}/{name}-{user}".format(
+            role=self.role,
+            id=self.id_number,
+            name=self.name,
+            user=self.user,
+        )
+
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     """
-    Reference: https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html
+    Reference: https://cjh5414.github.io/extending-user-model-using-one-to-one-link/
     """
     if created:
         Profile.objects.create(user=instance)
@@ -27,6 +38,6 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     """
-    Reference: https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html
+    Reference: https://cjh5414.github.io/extending-user-model-using-one-to-one-link/
     """
     instance.profile.save()
