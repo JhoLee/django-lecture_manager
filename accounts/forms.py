@@ -23,16 +23,7 @@ class SignupForm(auth_forms.UserCreationForm):
         self.fields['password1'].help_text = "최소 8자 이상"
 
 
-# class LoginForm(forms.ModelForm):
-#     class Meta:
-#         model = User
-#         fields = ('username', 'password')
-#         labels = {
-#             'username': _('Email'),
-#             'password': _('PW'),
-#         }
-
-class LoginForm(auth_forms.AuthenticationForm):
+class SigninForm(auth_forms.AuthenticationForm):
     username = forms.EmailField(widget=forms.EmailInput(attrs={'autofocus': True}))
 
 

@@ -10,7 +10,7 @@ urlpatterns = [
     path('login/', views.signin, name='login'),  # TOdo: Change to custom login view
     path('logout/', views.signout, name='logout'),
     path('profile/', views.view_profile, name='view_profile'),
-    path('update-profile/', views.update_profile, name='update_profile'),
+    path('profile/update/', views.update_profile, name='update_profile'),
     path('change-password/', auth_views.PasswordChangeView.as_view(success_url='accounts/profile', ), name='password_change'),
     # toDO: Implement password changing...
 ]

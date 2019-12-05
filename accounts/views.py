@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
-from accounts.forms import SignupForm, UpdateUserProfileForm, LoginForm
+from accounts.forms import SignupForm, UpdateUserProfileForm, SigninForm
 from django_lecture_manager import settings
 
 
@@ -18,7 +18,7 @@ def signin(request):
         context = {}
         return render(request, 'global/error_page.html', context=context)
     if request.method == "POST":
-        form = LoginForm(request.POST)
+        form = SigninForm(request.POST)
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
@@ -31,7 +31,7 @@ def signin(request):
         else:
             messages.error(request, '(로그인 실패...)')
     else:
-        form = LoginForm()
+        form = SigninForm()
     context = {
         "login_form": form,
     }
@@ -105,25 +105,29 @@ def view_profile(request):
     return render(request, 'accounts/profile_view.html', context=context)
 
 
-@login_required
 def update_profile(request):
-    # TOdo: Add password validation
-    user = request.user
-    profile = user.profile
-    initial_data = {
-        'name': profile.name,
-        'role': profile.role,
-        'id_number': profile.id_number,
-    }
-    user_update_form = UpdateUserProfileForm(request.POST or None, initial=initial_data, instance=profile)
-    if request.method == 'POST':
-        if user_update_form.is_valid():
-            profile = user_update_form.save(commit=False)
+    if not request.user.is_authenticated:
+        messages.error(request, "로그인 하셔야 합니다.")
+        context = {}
+        return redirect('accounts:login')
+    else:
+        # TOdo: Add password validation
+        user = request.user
+        profile = user.profile
+        initial_data = {
+            'name': profile.name,
+            'role': profile.role,
+            'id_number': profile.id_number,
+        }
+        user_update_form = UpdateUserProfileForm(request.POST or None, initial=initial_data, instance=profile)
+        if request.method == 'POST':
+            if user_update_form.is_valid():
+                profile = user_update_form.save(commit=False)
 
-            profile.save()
-            return HttpResponseRedirect(reverse('accounts:view_profile'))
+                profile.save()
+                return HttpResponseRedirect(reverse('accounts:view_profile'))
 
-    context = {
-        'user_update_form': user_update_form,
-    }
-    return render(request, 'accounts/profile_update.html', context)
+        context = {
+            'user_update_form': user_update_form,
+        }
+        return render(request, 'accounts/profile_update.html', context)
