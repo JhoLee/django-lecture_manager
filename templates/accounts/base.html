@@ -1,0 +1,27 @@
+{% extends 'global/bootstrap_base.html' %}
+
+{% block navbar %}
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">교수 강의지원</a>
+        {% if request.user.is_authenticated %}
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                    aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle Navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div id="navbarMenus" class="navbar-nav mr-sm-auto">
+                    <a class="nav-item nav-link" href="{% url 'accounts:view_profile' %}">(강의 관리)</a>
+                </div>
+                <div id="navbarAccounts" class="navbar-nav mr-sm-2">
+                    <a class="nav-item nav-link"
+                       href="{% url 'accounts:view_profile' %}">{{ request.user.profile.name }} ({{ request.user.profile.role }})</a>
+                    <a class="nav-item nav-link" href="{% url 'accounts:logout' %}">Logout</a>
+                </div><!--/div#navbarAccounts-->
+            </div><!--/div#navbarNavAltMarkup-->
+
+        {% endif %}
+    </nav>
+{% endblock %}
+

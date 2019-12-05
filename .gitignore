@@ -1,6 +1,6 @@
 /.idea
 /venv
-
+/static
 
 # Created by https://www.gitignore.io/api/vim,linux,macos,python,django,pycharm,windows,visualstudio,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=vim,linux,macos,python,django,pycharm,windows,visualstudio,visualstudiocode
@@ -391,7 +391,7 @@ bld/
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
-# Uncomment if you have tasks that create the project's static files in wwwroot
+# Uncomment if you have tasks that create the project's staticfiles files in wwwroot
 #wwwroot/
 
 # Visual Studio 2017 auto generated files
