@@ -1,15 +1,5 @@
-{# [START] message #}
-{% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
-                {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
-                {{ message }}
-            </li>
-        {% endfor %}
-    </ul>
-{% endif %}
-{# [END] message #}
+{% extends 'accounts/base.html' %}
+{% block container_content %}
 
 <form method="post">
     <form action="{% url 'accounts:update_profile' %}" method="POST">
@@ -20,3 +10,5 @@
 </form>
 <!-- todo: Add password validation -->
 <input type="button" onclick="location.href='{% url 'accounts:view_profile' %}' " value="취소">
+
+{% endblock %}

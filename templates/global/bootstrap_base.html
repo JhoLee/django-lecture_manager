@@ -1,0 +1,37 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap-4.4.1.min.css' %}">
+    {% block extra_css %}{% endblock %}
+
+    <title>{% block title %}Lecture Manager{% endblock %}</title>
+</head>
+<body>
+{% block body %}
+    <div id="main-container" class="container">
+        {% block message %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endblock %}
+
+        {% block container_content %}
+        {% endblock %}
+    </div>
+{% endblock %}
+
+<script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+<script src="{% static 'js/bootstrap-4.4.1.min.js' %}"></script>
+{% block extra_script %}{% endblock %}
+</body>
+</html>

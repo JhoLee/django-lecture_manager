@@ -1,8 +1,7 @@
-from django import forms
 import django.contrib.auth.forms as auth_forms
+from django import forms
 from django.contrib.auth.models import User
 from django.forms import ModelForm
-from django.utils.translation import gettext_lazy as _
 
 from accounts.models import Profile, Role
 

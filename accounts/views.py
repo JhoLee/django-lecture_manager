@@ -82,6 +82,7 @@ def signup(request):
 
 
 def view_profile(request):
+    messages.info(request, "Hello, World!")
     if request.user.is_authenticated:
         user = {
             'username': request.user.username,
