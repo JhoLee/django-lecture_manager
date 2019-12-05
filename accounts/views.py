@@ -25,7 +25,7 @@ def signin(request):
 
         if user is not None:
             login(request, user)
-            messages.info(request, user.name + "님, 환영합니다.")
+            messages.info(request, user.profile.name + "님, 환영합니다.")
             return redirect('accounts:view_profile')
 
         else:
