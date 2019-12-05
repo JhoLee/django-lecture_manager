@@ -1,13 +1,46 @@
 from django.contrib import messages
-from django.contrib.auth import login, authenticate, get_user_model
+from django.contrib.auth import login, authenticate, get_user_model, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib.auth.views import LoginView
 from django.db import transaction
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
-from accounts.forms import SignupForm, UpdateUserProfileForm
+from accounts.forms import SignupForm, UpdateUserProfileForm, LoginForm
+from django_lecture_manager import settings
+
+
+def signin(request):
+    if request.user.is_authenticated:
+        messages.error(request, "이미 로그인 됨")
+        context = {}
+        return render(request, 'global/error_page.html', context=context)
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            messages.info(request, user.name + "님, 환영합니다.")
+            return redirect('accounts:view_profile')
+
+        else:
+            messages.error(request, '(로그인 실패...)')
+    else:
+        form = LoginForm()
+    context = {
+        "login_form": form,
+    }
+    return render(request, 'accounts/login.html', context=context)
+
+
+def signout(request):
+    logout(request)
+    return redirect('accounts:login')
 
 
 def signup(request):
@@ -15,34 +48,37 @@ def signup(request):
     회원가입을 위한 뷰.
     Login 되어 있을 시에는 회원가입 페이지에 접근하지 못하도록 함.
     """
-    error_message = ""
     if request.user.is_authenticated:
-        error_message = "(대충 로그인되어 있다는 메세지)"
-        context = {
-            "error_message": error_message
-        }
+        messages.error(request, "이미 로그인 됨")
+        context = {}
         return render(request, 'global/error_page.html', context=context)
     else:
         if request.method == "POST":
             form = SignupForm(request.POST)
             if form.is_valid():
-                print("valid")
                 user = form.save()
                 user.refresh_from_db()
-                user.profile.id_number = form.cleaned_data.get('id_number')
-                user.role = form.cleaned_data.get('role')
-                user.save()
 
-                user = authenticate(username=user.username, password=form.cleaned_data.get('password,1'))
-                login(request, user)
-                return redirect('accounts:profile')
+                # set profile data
+                profile = user.profile
+                profile.name = form.cleaned_data.get('name')
+                profile.id_number = form.cleaned_data.get('id_number')
+                profile.role = form.cleaned_data.get('role')
+                form.save()
+
+                username = form.cleaned_data.get('username')
+                raw_pass = form.cleaned_data.get('password1')
+
+                user = authenticate(request, username=username, password=raw_pass)
+                login(request, user, )
+                return redirect('accounts:view_profile')
             else:
-                error_message = "(대충 에러가 있다는 메세지)"
+                messages.error(request, "이미 로그인 됨")
         else:
             form = SignupForm()
         context = {
             "user_form": form,
-            "error_message": error_message,
+            "user": request.user,
         }
 
         return render(request, 'accounts/signup.html', context=context)
@@ -61,7 +97,11 @@ def view_profile(request):
             'user': user,
         }
     else:
-        redirect('accounts:singup')
+        uri = '{login_url}?next={redirect_to}'.format(
+            login_url=settings.LOGIN_URL,
+            redirect_to=request.path
+        )
+        redirect(uri)
     return render(request, 'accounts/profile_view.html', context=context)
 
 

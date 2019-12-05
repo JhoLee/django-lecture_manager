@@ -1,3 +1,5 @@
+(login.html)
+
 {# [START] message #}
 {% if messages %}
 <ul class="messages">
@@ -10,7 +12,10 @@
 </ul>
 {% endif %}
 {# [END] message #}
-<br>
-<input type="button" onclick="location.href='{% url 'accounts:view_profile' %}' " value="내 프로필">
-<input type="button" onclick="location.href='{% url 'accounts:signup' %}' " value="강의 홈">
-{# todo: modify url 'accounts:signup' -> 'lecture:index' #}
+
+<form method="POST">
+    {% csrf_token %}
+    {{ login_form.as_p }}
+    <input type="submit" value="Login">
+    <input type="button" onclick="location.href='{% url 'accounts:signup' %}' " value="Sign-up">
+</form>

@@ -1,13 +1,13 @@
 from django import forms
-from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+import django.contrib.auth.forms as auth_forms
 from django.contrib.auth.models import User
 from django.forms import ModelForm
+from django.utils.translation import gettext_lazy as _
 
 from accounts.models import Profile, Role
 
 
-class SignupForm(UserCreationForm):
+class SignupForm(auth_forms.UserCreationForm):
     username = forms.EmailField(max_length=254, help_text='이메일로 가입가능합니다.', label="ID")
 
     name = forms.CharField(max_length=100, label='이름')
@@ -19,8 +19,21 @@ class SignupForm(UserCreationForm):
         fields = ('username', 'password1', 'password2', 'name', 'role', 'id_number',)
 
     def __init__(self, *args, **kwargs):
-        super(UserCreationForm, self).__init__(*args, **kwargs)
+        super(auth_forms.UserCreationForm, self).__init__(*args, **kwargs)
         self.fields['password1'].help_text = "최소 8자 이상"
+
+
+# class LoginForm(forms.ModelForm):
+#     class Meta:
+#         model = User
+#         fields = ('username', 'password')
+#         labels = {
+#             'username': _('Email'),
+#             'password': _('PW'),
+#         }
+
+class LoginForm(auth_forms.AuthenticationForm):
+    username = forms.EmailField(widget=forms.EmailInput(attrs={'autofocus': True}))
 
 
 class UpdateUserProfileForm(ModelForm):
