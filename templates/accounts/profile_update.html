@@ -1,14 +1,22 @@
 {% extends 'accounts/base.html' %}
 {% block container_content %}
 
-<form method="post">
-    <form action="{% url 'accounts:update_profile' %}" method="POST">
+    <form method="POST">
         {% csrf_token %}
-        {{ user_update_form.as_p }}
-        <button type="submit">Save changes</button>
+
+        {# Ref. https://www.webforefront.com/django/formtemplatelayout.html #}
+        {% for field in user_update_form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field.as_widget }}
+                <small id="{{ field.auto_id }}Help" class="form-text text-muted">{{ field.help_text }}</small>
+            </div>
+        {% endfor %}
+
+        <input type="submit" value="저장" class="btn btn-success btn-lg btn-block">
+        <a href="{% url 'accounts:view_profile' %}" class="btn btn-outline-dark btn-lg btn-block">취소</a>
+        <!-- todo: Add password validation -->
     </form>
-</form>
-<!-- todo: Add password validation -->
-<input type="button" onclick="location.href='{% url 'accounts:view_profile' %}' " value="취소">
+
 
 {% endblock %}

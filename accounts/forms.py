@@ -21,14 +21,40 @@ class SignupForm(auth_forms.UserCreationForm):
         super(auth_forms.UserCreationForm, self).__init__(*args, **kwargs)
         self.fields['password1'].help_text = "최소 8자 이상"
 
+        # form-control
+        # Ref. https://stackoverflow.com/questions/31627253/django-modelform-with-bootstrap
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control',
+            })
+
 
 class SigninForm(auth_forms.AuthenticationForm):
     username = forms.EmailField(widget=forms.EmailInput(attrs={'autofocus': True}))
+
+    # form=control
+    # Ref. https://stackoverflow.com/questions/31627253/django-modelform-with-bootstrap
+    def __init__(self, *args, **kwargs):
+        super(SigninForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control',
+            })
 
 
 class UpdateUserProfileForm(ModelForm):
     class Meta:
         model = Profile
         fields = ('id_number', 'name',)
-    # TODO: 레이블 변경
 
+    def __init__(self, *args, **kwargs):
+        super(UpdateUserProfileForm, self).__init__(*args, **kwargs)
+        self.fields['id_number'].label = "직번/학번"
+        self.fields['name'].label = "이름"
+
+        # form-control
+        # Ref. https://stackoverflow.com/questions/31627253/django-modelform-with-bootstrap
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control',
+            })

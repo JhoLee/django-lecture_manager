@@ -2,11 +2,21 @@
 {% block container_content %}
 
 
-    <form id="signup-form" method="POST" action="{% url 'accounts:signup' %}">
+    <form method="POST">
         {% csrf_token %}
-        {{ user_form.as_p }}
-        <input type="submit" id="signup-submit-btn" value="가입">
-        <a href="{% url 'accounts:signup' %}" id="signup-reset-btn">취소</a>
+
+        {# Ref. https://www.webforefront.com/django/formtemplatelayout.html #}
+        {% for field in user_form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field.as_widget }}
+                <small id="{{ field.auto_id }}Help" class="form-text text-muted">{{ field.help_text }}</small>
+            </div>
+        {% endfor %}
+
+        <input type="submit" id="signup-submit-btn" value="가입" class="btn btn-success btn-lg btn-block">
+        <a href="{% url 'accounts:login' %}" id="signup-reset-btn"
+           class="btn btn-outline-danger btn-lg btn-block">취소</a>
     </form>
 
 {% endblock %}
