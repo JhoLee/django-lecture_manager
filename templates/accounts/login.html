@@ -1,0 +1,21 @@
+(login.html)
+
+{# [START] message #}
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}{% endif %}
+        {{ message }}
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+{# [END] message #}
+
+<form method="POST">
+    {% csrf_token %}
+    {{ login_form.as_p }}
+    <input type="submit" value="Login">
+    <input type="button" onclick="location.href='{% url 'accounts:signup' %}' " value="Sign-up">
+</form>
