@@ -17,13 +17,13 @@ class Profile(models.Model):
     name = models.CharField(blank=True, max_length=100)
     role = models.ForeignKey(Role,  on_delete=models.SET_NULL, null=True)
 
-    def __str__(self):
-        return "{role}/{id}/{name}-{user}".format(
-            role=self.role,
-            id=self.id_number,
-            name=self.name,
-            user=self.user,
-        )
+    # def __str__(self):
+    #     return "{role}/{id}/{name}-{user}".format(
+    #         role=self.role,
+    #         id=self.id_number,
+    #         name=self.name,
+    #         user=self.user,
+    #     )
 
 
 @receiver(post_save, sender=User)

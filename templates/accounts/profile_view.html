@@ -1,0 +1,27 @@
+<table id="profile-table">
+    <tr>
+        <th>ID</th>
+        <td>{{ user.username }}</td>
+    </tr>
+    <tr>
+        <th>이름</th>
+        <td>{{ user.name }}</td>
+    </tr>
+    <tr>
+        {% if user.role == "학생" %}
+            <th>학번</th>
+        {% elif user.role == "교수" %}
+            <th>직번</th>
+        {% else %}
+            <th>번호</th>
+        {% endif %}
+        <td>{{ user.id_number }}</td>
+    </tr>
+    <tr>
+        <th>신분</th>
+        <td>{{ user.role }}</td>
+    </tr>
+
+</table>
+
+<a href="{% url 'accounts:update_profile' %}">수정</a>

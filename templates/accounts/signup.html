@@ -1,9 +1,19 @@
 <html>
 <body>
-
-    <form id="signup-form" method="POST" action="{%  url 'accounts:signup' %}">
+{# Already logged in #}
+{% if user.is_authenticated %}
+    (대충 이미 로그인되어 있다는 메세지)
+    <br>
+    <a href="{% url 'accounts:signup' %}" id="index-btn">강의 홈</a>
+    {# todo: modify url 'accounts:signup' -> 'lecture:index' #}
+{% else %}
+    {{ error_message }}
+    <form id="signup-form" method="POST" action="{% url 'accounts:signup' %}">
         {% csrf_token %}
-        {{ userform.as_p }}
+        {{ user_form.as_p }}
+        <input type="submit" id="signup-submit-btn" value="가입">
+        <a href="{% url 'accounts:signup' %}" id="signup-reset-btn">취소</a>
     </form>
+{% endif %}
 </body>
 </html>
