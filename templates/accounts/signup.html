@@ -1,22 +1,31 @@
 {% extends 'accounts/base.html' %}
 {% block container_content %}
 
-
     <form method="POST">
-        {% csrf_token %}
+        <div class="jumbotron">
+        <h4>회원 가입</h4>
+        <hr class="my-4">
 
-        {# Ref. https://www.webforefront.com/django/formtemplatelayout.html #}
-        {% for field in user_form %}
-            <div class="form-group">
-                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                {{ field.as_widget }}
-                <small id="{{ field.auto_id }}Help" class="form-text text-muted">{{ field.help_text }}</small>
-            </div>
-        {% endfor %}
+
+            {% csrf_token %}
+
+            {# Ref. https://www.webforefront.com/django/formtemplatelayout.html #}
+            {% for field in user_form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field.as_widget }}
+                    <small id="{{ field.auto_id }}Help" class="form-text text-muted">{{ field.help_text }}</small>
+                    {% if forloop.counter == 3 %}
+                        <hr class="my-3">
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+
+        </div>
 
         <input type="submit" id="signup-submit-btn" value="가입" class="btn btn-success btn-lg btn-block">
         <a href="{% url 'accounts:login' %}" id="signup-reset-btn"
            class="btn btn-outline-danger btn-lg btn-block">취소</a>
     </form>
-
 {% endblock %}

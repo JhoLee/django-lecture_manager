@@ -7,11 +7,11 @@ from accounts.models import Profile, Role
 
 
 class SignupForm(auth_forms.UserCreationForm):
-    username = forms.EmailField(max_length=254, help_text='이메일로 가입가능합니다.', label="ID")
+    username = forms.EmailField(max_length=254, help_text='이메일 가입만 가능합니다.', label="ID")
 
-    name = forms.CharField(max_length=100, label='이름')
+    name = forms.CharField(help_text='실명으로 적어주세요.', max_length=100, label='이름')
     id_number = forms.IntegerField(help_text='숫자로만 적어주세요.', label='직번/학번')
-    role = forms.ModelChoiceField(queryset=Role.objects.all(), label='신분', initial=0)
+    role = forms.ModelChoiceField(help_text='선택해주세요.', queryset=Role.objects.all(), label='신분', initial=0)
 
     class Meta:
         model = User
@@ -54,6 +54,17 @@ class UpdateUserProfileForm(ModelForm):
 
         # form-control
         # Ref. https://stackoverflow.com/questions/31627253/django-modelform-with-bootstrap
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control',
+            })
+
+
+class ChangePasswordForm(auth_forms.PasswordChangeForm):
+    # form=control
+    # Ref. https://stackoverflow.com/questions/31627253/django-modelform-with-bootstrap
+    def __init__(self, *args, **kwargs):
+        super(ChangePasswordForm, self).__init__(*args, **kwargs)
         for field in iter(self.fields):
             self.fields[field].widget.attrs.update({
                 'class': 'form-control',

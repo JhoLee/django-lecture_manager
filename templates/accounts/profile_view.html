@@ -2,32 +2,34 @@
 {% block container_content %}
 
 
-    <table id="profile-table">
-        <tr>
-            <th>ID</th>
-            <td>{{ user.username }}</td>
-        </tr>
-        <tr>
-            <th>이름</th>
-            <td>{{ user.name }}</td>
-        </tr>
-        <tr>
+    <div class="jumbotron">
+        <h1 class="display-">프로필</h1>
+        <hr class="my-4">
+
+        <dl class="row">
+
+            <dt class="col-sm-2">ID</dt>
+            <dd class="col-sm-4">{{ user.username }}</dd>
+
+            <dt class="col-sm-2">이름</dt>
+            <dd class="col-sm-4">{{ user.name }}</dd>
+
             {% if user.role == "학생" %}
-                <th>학번</th>
+                <dt class="col-sm-2">학번</dt>
             {% elif user.role == "교수" %}
-                <th>직번</th>
+                <dt class="col-sm-2">직번</dt>
             {% else %}
-                <th>번호</th>
+                <dt class="col-sm-2">번호</dt>
             {% endif %}
-            <td>{{ user.id_number }}</td>
-        </tr>
-        <tr>
-            <th>신분</th>
-            <td>{{ user.role }}</td>
-        </tr>
+            <dd class="col-sm-4">{{ user.id_number }}</dd>
 
-    </table>
+            <dt class="col-sm-2">신분</dt>
+            <dd class="col-sm-4">{{ user.role }}</dd>
+        </dl>
 
-    <input type="button" onclick="location.href='{% url 'accounts:update_profile' %}' " value="프로필 수정">
-    <input type="button" onclick="location.href='{% url 'accounts:password_change' %}' " value="비밀번호 변경">
+        <input type="button" onclick="location.href='{% url 'accounts:update_profile' %}' " value="프로필 수정"
+               class="btn btn-lg btn-block btn-success">
+        <input type="button" onclick="location.href='{% url 'accounts:password_change' %}' " value="비밀번호 변경"
+               class="btn btn-lg btn-block btn-warning">
+    </div>
 {% endblock %}

@@ -1,22 +1,25 @@
 {% extends 'accounts/base.html' %}
 {% block container_content %}
 
+    <div class="jumbotron">
+        <form method="POST">
+            {% csrf_token %}
 
-    <form method="POST">
-        {% csrf_token %}
+            {# Ref. https://www.webforefront.com/django/formtemplatelayout.html #}
+            {% for field in login_form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field.as_widget }}
+                    <small id="{{ field.auto_id }}Help" class="form-text text-muted">{{ field.help_text }}</small>
+                </div>
+            {% endfor %}
 
-        {# Ref. https://www.webforefront.com/django/formtemplatelayout.html #}
-        {% for field in login_form %}
-            <div class="form-group">
-                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                {{ field.as_widget }}
-                <small id="{{ field.auto_id }}Help" class="form-text text-muted">{{ field.help_text }}</small>
-            </div>
-        {% endfor %}
+            <hr class="my-3">
+            <input type="submit" value="로그인" class="btn btn-primary btn-lg btn-block">
+            <input type="button" onclick="location.href='{% url 'accounts:signup' %}' " value="회원가입"
+                   class="btn btn-outline-success btn-lg btn-block">
+        </form>
 
-        <input type="submit" value="로그인" class="btn btn-primary btn-lg btn-block">
-        <input type="button" onclick="location.href='{% url 'accounts:signup' %}' " value="회원가입"
-               class="btn btn-outline-success btn-lg btn-block">
-    </form>
+    </div>
 
 {% endblock %}

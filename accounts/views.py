@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
-from accounts.forms import SignupForm, UpdateUserProfileForm, SigninForm
+from accounts.forms import SignupForm, UpdateUserProfileForm, SigninForm, ChangePasswordForm
 from django_lecture_manager import settings
 
 
@@ -138,7 +138,7 @@ def change_password(request):
         return redirect('accounts:login')
     else:
         if request.method == "POST":
-            change_password_form = auth_forms.PasswordChangeForm(request.user, request.POST)
+            change_password_form = ChangePasswordForm(request.user, request.POST)
 
             if change_password_form.is_valid():
                 user = change_password_form.save()
@@ -150,7 +150,7 @@ def change_password(request):
                 messages.error(request, '비밀번호 변경 실패')
 
         else:
-            change_password_form = auth_forms.PasswordChangeForm(request.user)
+            change_password_form = ChangePasswordForm(request.user)
             context = {
                 'password_change_form': change_password_form,
             }
