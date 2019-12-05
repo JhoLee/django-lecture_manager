@@ -26,7 +26,7 @@ def signin(request):
             return redirect('accounts:view_profile')
 
         else:
-            messages.error(request, '(로그인 실패...)')
+            messages.error(request, '로그인 실패...')
     else:
         form = SigninForm()
     context = {
