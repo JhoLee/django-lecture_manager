@@ -1,9 +1,6 @@
 from django.contrib import messages
-from django.contrib.auth import login, authenticate, get_user_model, logout
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from django.contrib.auth.views import LoginView
-from django.db import transaction
+from django.contrib.auth import forms as auth_forms, update_session_auth_hash
+from django.contrib.auth import login, authenticate, logout
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -131,3 +128,31 @@ def update_profile(request):
             'user_update_form': user_update_form,
         }
         return render(request, 'accounts/profile_update.html', context)
+
+
+def change_password(request):
+    # todo: Custom password change form's style
+    if not request.user.is_authenticated:
+        messages.error(request, "로그인 하셔야 합니다.")
+        context = {}
+        return redirect('accounts:login')
+    else:
+        if request.method == "POST":
+            change_password_form = auth_forms.PasswordChangeForm(request.user, request.POST)
+
+            if change_password_form.is_valid():
+                user = change_password_form.save()
+                update_session_auth_hash(request, user)
+                messages.info(request, '비밀번호 변경 완료')
+
+                return redirect('accounts:view_profile')
+            else:
+                messages.error(request, '비밀번호 변경 실패')
+
+        else:
+            change_password_form = auth_forms.PasswordChangeForm(request.user)
+            context = {
+                'password_change_form': change_password_form,
+            }
+
+        return render(request, 'accounts/password_change.html', context=context)

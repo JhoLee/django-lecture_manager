@@ -2,31 +2,22 @@
 <body>
 {# [START] message #}
 {% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
-        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
-        {{ message }}
-    </li>
-    {% endfor %}
-</ul>
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+                {{ message }}
+            </li>
+        {% endfor %}
+    </ul>
 {% endif %}
 {# [END] message #}
 
-{# Already logged in #}
-{% if user.is_authenticated %}
-    {{ user.username }}
-    <br>
-    <a href="{% url 'accounts:view_profile' %}" id="index-btn">강의 홈</a>
-    {# todo: modify url 'accounts:signup' -> 'lecture:index' #}
-{% else %}
-    {{ error_message }}
-    <form id="signup-form" method="POST" action="{% url 'accounts:signup' %}">
-        {% csrf_token %}
-        {{ user_form.as_p }}
-        <input type="submit" id="signup-submit-btn" value="가입">
-        <a href="{% url 'accounts:signup' %}" id="signup-reset-btn">취소</a>
-    </form>
-{% endif %}
+<form id="signup-form" method="POST" action="{% url 'accounts:signup' %}">
+    {% csrf_token %}
+    {{ user_form.as_p }}
+    <input type="submit" id="signup-submit-btn" value="가입">
+    <a href="{% url 'accounts:signup' %}" id="signup-reset-btn">취소</a>
+</form>
 </body>
 </html>

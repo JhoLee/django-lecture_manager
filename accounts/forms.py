@@ -32,3 +32,4 @@ class UpdateUserProfileForm(ModelForm):
         model = Profile
         fields = ('id_number', 'name',)
     # TODO: 레이블 변경
+

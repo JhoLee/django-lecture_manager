@@ -37,4 +37,5 @@
 
 </table>
 
-<a href="{% url 'accounts:update_profile' %}">수정</a>
+<input type="button" onclick="location.href='{% url 'accounts:update_profile' %}' " value="프로필 수정">
+<input type="button" onclick="location.href='{% url 'accounts:password_change' %}' " value="비밀번호 변경">
