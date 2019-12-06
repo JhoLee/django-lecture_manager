@@ -4,14 +4,22 @@
     <form method="POST">
         {% csrf_token %}
 
-        {# Ref. https://www.webforefront.com/django/formtemplatelayout.html #}
-        {% for field in user_update_form %}
-            <div class="form-group">
-                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                {{ field.as_widget }}
-                <small id="{{ field.auto_id }}Help" class="form-text text-muted">{{ field.help_text }}</small>
-            </div>
-        {% endfor %}
+        <div class="jumbotron">
+            <h2>프로필 수정</h2>
+
+            <hr class="my-03">
+
+
+            {# Ref. https://www.webforefront.com/django/formtemplatelayout.html #}
+            {% for field in user_update_form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field.as_widget }}
+                    <small id="{{ field.auto_id }}Help" class="form-text text-muted">{{ field.help_text }}</small>
+                </div>
+            {% endfor %}
+
+        </div><!--/div.jumbotron>-->
 
         <input type="submit" value="저장" class="btn btn-success btn-lg btn-block">
         <a href="{% url 'accounts:view_profile' %}" class="btn btn-outline-dark btn-lg btn-block">취소</a>

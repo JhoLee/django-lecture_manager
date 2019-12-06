@@ -1,7 +1,5 @@
 {% extends 'accounts/base.html' %}
 {% block container_content %}
-
-
     <div class="jumbotron">
         <h1 class="display-">프로필</h1>
         <hr class="my-4">
@@ -27,9 +25,10 @@
             <dd class="col-sm-4">{{ user.role }}</dd>
         </dl>
 
-        <input type="button" onclick="location.href='{% url 'accounts:update_profile' %}' " value="프로필 수정"
-               class="btn btn-lg btn-block btn-success">
-        <input type="button" onclick="location.href='{% url 'accounts:password_change' %}' " value="비밀번호 변경"
-               class="btn btn-lg btn-block btn-warning">
+
     </div>
+    <input type="button" onclick="location.href='{% url 'accounts:update_profile' %}' " value="프로필 수정"
+           class="btn btn-lg btn-block btn-success">
+    <input type="button" onclick="location.href='{% url 'accounts:password_change' %}' " value="비밀번호 변경"
+           class="btn btn-lg btn-block btn-warning">
 {% endblock %}
