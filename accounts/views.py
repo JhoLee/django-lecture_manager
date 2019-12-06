@@ -98,7 +98,8 @@ def view_profile(request):
             login_url=settings.LOGIN_URL,
             redirect_to=request.path
         )
-        redirect(uri)
+
+        return redirect(uri)
     return render(request, 'accounts/profile_view.html', context=context)
 
 
