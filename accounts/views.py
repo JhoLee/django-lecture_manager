@@ -70,7 +70,7 @@ def signup(request):
                 login(request, user, )
                 return redirect('accounts:view_profile')
             else:
-                messages.error(request, "이미 로그인 됨")
+                messages.error(request, "회원가입 실패!")
         else:
             form = SignupForm()
         context = {

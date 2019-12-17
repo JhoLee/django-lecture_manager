@@ -21,6 +21,7 @@ from accounts import views as accounts_views
 urlpatterns = [
     path('', accounts_views.view_profile),
     path('admin/', admin.site.urls),
-    path('accounts/', include('accounts.urls', namespace='accounts'))
+    path('accounts/', include('accounts.urls', namespace='accounts')),
+    path('lecture/', include('lecture.urls', namespace='lecture')),
 
 ]
