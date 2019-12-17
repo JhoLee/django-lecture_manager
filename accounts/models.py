@@ -14,9 +14,14 @@ class Role(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     id_number = models.IntegerField(blank=True, null=True)
-    name = models.CharField(blank=True, max_length=100)
-    role = models.ForeignKey(Role,  on_delete=models.SET_NULL, null=True)
+    name = models.CharField(default="unknown_user", max_length=100)
+    role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True)
 
+    def __str__(self):
+        return "{name}({id})".format(
+            id=self.user.username,
+            name=self.name,
+        )
     # def __str__(self):
     #     return "{role}/{id}/{name}-{user}".format(
     #         role=self.role,

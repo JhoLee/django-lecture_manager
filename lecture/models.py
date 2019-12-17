@@ -30,6 +30,18 @@ class Course(models.Model):
         )
 
 
+class Enrollment(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
+    join_dt = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return "{course}: {student}".format(
+            course=self.course.name,
+            student=self.student.profile.name,
+        )
+
+
 def notice_upload_path(self, filename):
     return 'uploads/{0}/notice/{1}/'.format(self.course.name, filename)
 
