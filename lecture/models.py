@@ -37,14 +37,25 @@ def notice_upload_path(self, filename):
 class Notice(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     publisher = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default='unknown user')
+    title = models.CharField(max_length=200)
     content = models.TextField()
     file = models.FileField(
         upload_to=notice_upload_path,
+        blank=True,
         null=True
 
     )
     pub_dt = models.DateTimeField(auto_now_add=True)
     edit_dt = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "{course_name}-{publisher_name}-{title}-{pub_dt}".format(
+            course_name=self.course.name,
+            publisher_name=self.publisher.profile.name,
+            title=self.title,
+            pub_dt=self.pub_dt,
+
+        )
 
 
 @receiver(models.signals.post_delete, sender=Notice)
