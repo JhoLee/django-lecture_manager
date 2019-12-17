@@ -1,0 +1,65 @@
+{% extends 'lecture/base.html' %}
+
+{% block container_content %}
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'lecture:index' %}">강의 홈</a></li>
+            <li class="breadcrumb-item active" aria-current="page">강의 게시판</li>
+        </ol>
+    </nav>
+
+    <div class="jumbotron">
+        <h2> {{ course.name }}</h2>
+        {% if course.professor.id == user.id %}
+            {#            <a href="{% url 'lecture:course_update'   %}" class="btn btn-outline-warning btn-sm ">수정</a>#}
+            {# 수정으로 바꿔야.. url #}
+        {% endif %}
+        <h5 class="text-muted">{{ course.professor }} 교수</h5>
+        <h6 class="text-muted">({{ course.id }})</h6>
+        <hr class="my-4">
+        <dl class="row card-text">
+            <dt class="col-3 col-lg-2">년도</dt>
+            <dd class="col-3 col-lg-4">{{ course.year }}</dd>
+
+            <dt class="col-3 col-lg-2">학기</dt>
+            <dd class="col-3 col-lg-4">{{ course.semester }}</dd>
+
+            <dt class="col-3 col-lg-2">강의개요</dt>
+            <dd class="col-9 col-lg-8">{{ course.description }}</dd>
+        </dl>
+    </div><!--/div.jumbotron-->
+
+
+    <div id="notice-list-group" class="list-group">
+        <a href="{% url 'lecture:notice_index' course.id %}" class="list-group-item list-group-item-action active">
+            <h3 class="align-items-center">강의</h3>
+        </a>
+        {% if notices %}
+            {% for notice in notices %}
+                <a href="{% url 'lecture:notice_read' course.id  notice.id %}"
+                   class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">{{ notice.title }}</h5>
+                        <small>{{ notice.pub_dt | timesince }} 이전</small>
+                    </div>
+                    <p class="mb-1">{{ notice.content | truncatechars:15 }}</p>
+                    <small>{{ notice.publisher.profile.name }}</small>
+                </a>
+            {% endfor %}
+            </div>
+        {% else %}
+            <div class="list-group-item list-group-item-action">
+                <h5>등록된 게시물이 없습니다...</h5>
+            </div>
+        {% endif %}
+    {% if course.professor.id == user.id %}
+        <a href="{% url 'lecture:notice_create' course.id %}"
+           class="btn btn-outline-success btn-lg btn-block">강의 게시물 등록</a>
+    {% endif %}
+
+
+
+
+{% endblock %}

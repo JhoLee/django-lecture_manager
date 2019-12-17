@@ -7,7 +7,7 @@ from accounts.models import User
 
 
 class Course(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
 
     class Semester(models.IntegerChoices):
         FIRST = 1, '1학기'

@@ -1,0 +1,28 @@
+{% extends 'lecture/base.html' %}
+{% block container_content %}
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'lecture:index' %}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">강의 홈</li>
+        </ol>
+    </nav>
+
+
+    <div id="course-list-group" class="list-group">
+        {% for course in my_courses %}
+            <a href="{% url 'lecture:course_index' course.id %}" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                    <h2 class="mb-1">{{ course.name }}</h2>
+                    <small>강의번호: {{ course.id }}</small>
+                </div>
+                <p class="mb-1">{{ course.description | truncatechars:100 }}</p>
+                <small>교수: {{ course.professor.profile.name }}</small>
+            </a>
+
+        {% endfor %}
+    </div>
+
+    <a href="{% url 'lecture:course_create' %}" class="btn btn-success btn-lg btn-block">강의 등록</a>
+
+{% endblock %}
