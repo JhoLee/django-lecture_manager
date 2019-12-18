@@ -66,6 +66,7 @@ def course_create(request):
             course.save()
             return redirect('lecture:course_index', course.id)
         else:
+            messages.error(request, "무언가 잘못 되었습니다. 다시 시도해주세요.")
             context['course_form'] = course_form
     else:
         course_form = CourseForm()
@@ -93,6 +94,8 @@ def course_update(request, course_id):
             new_course.professor = user
             new_course.save()
 
+            messages.info(request, "강의 수정 완료!")
+
             return redirect('lecture:course_index', course.id)
     else:
         course_form = CourseForm(instance=course)
@@ -101,11 +104,25 @@ def course_update(request, course_id):
     return render(request, 'lecture/course/course_update.html', context)
 
 
+def course_delete(request, course_id):
+    context = {}
+
+    course = get_object_or_404(Course, id=course_id)
+
+    if request.user.id is not course.professor.id:
+        return redirect('lecture:course_index', course_id)
+
+    course.delete()
+    messages.info(request, "강의 삭제 완료!")
+    return redirect('lecture:index')
+
+
 def course_join(request, course_id):
     context = {}
     user = request.user
 
     if check_role(user) == "교수":
+        messages.error(request, "권한이 없습니다.")
         return redirect('lecture:index')
     is_enrolled = Enrollment.objects.filter(student=user, course=course_id).exists()
     if is_enrolled:
@@ -116,6 +133,7 @@ def course_join(request, course_id):
             _id = request.POST['_id']
             course = get_object_or_404(Course, pk=_id)
             Enrollment.objects.create(course=course, student=user)
+            messages.info(request, '강의 참가 완료!')
 
             return redirect('lecture:course_index', _id)
         context['is_enrolled'] = False
