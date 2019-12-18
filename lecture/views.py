@@ -7,6 +7,8 @@ from lecture.models import Course, Enrollment, Notice, NoticeComment
 
 def index(request):
     user = request.user
+    if not check_if_authenticated(request):
+        return redirect('accounts:login')
     context = {}
     if check_role(user) == "교수":
         # 교수
@@ -35,6 +37,8 @@ def index(request):
 def course_index(request, course_id):
     context = {}
     user = request.user
+    if not check_if_authenticated(request):
+        return redirect('accounts:login')
     course = get_object_or_404(Course, pk=course_id)
     context["course"] = course
 
@@ -58,6 +62,8 @@ def course_index(request, course_id):
 def course_create(request):
     context = {}
     user = request.user
+    if not check_if_authenticated(request):
+        return redirect('accounts:login')
     if request.method == "POST":
         course_form = CourseForm(request.POST)
         if course_form.is_valid():
@@ -79,6 +85,8 @@ def course_update(request, course_id):
 
     course = get_object_or_404(Course, pk=course_id)
     user = request.user
+    if not check_if_authenticated(request):
+        return redirect('accounts:login')
 
     if request.user.id is not course.professor.id:
         return redirect('lecture:course_index', course_id)
@@ -106,7 +114,9 @@ def course_update(request, course_id):
 
 def course_delete(request, course_id):
     context = {}
-
+    user = request.user
+    if not check_if_authenticated(request):
+        return redirect('accounts:login')
     course = get_object_or_404(Course, id=course_id)
 
     if request.user.id is not course.professor.id:
@@ -120,6 +130,8 @@ def course_delete(request, course_id):
 def course_join(request, course_id):
     context = {}
     user = request.user
+    if not check_if_authenticated(request):
+        return redirect('accounts:login')
 
     if check_role(user) == "교수":
         messages.error(request, "권한이 없습니다.")
@@ -145,6 +157,9 @@ def course_join(request, course_id):
 
 def notice_index(request, course_id):
     context = {}
+    user = request.user
+    if not check_if_authenticated(request):
+        return redirect('accounts:login')
     course = get_object_or_404(Course, pk=course_id)
     context['course'] = course
     user = request.user
@@ -157,11 +172,13 @@ def notice_index(request, course_id):
 
 def notice_create(request, course_id):
     context = {}
+    user = request.user
+    if not check_if_authenticated(request):
+        return redirect('accounts:login')
     course = get_object_or_404(Course, pk=course_id)
     context['course'] = course
     notices = Notice.objects.all().filter(course=course)
     context['notices'] = notices
-    user = request.user
     if request.method == "POST":
         notice_form = NoticeForm(request.POST, request.FILES)
         if notice_form.is_valid():
@@ -180,6 +197,8 @@ def notice_read(request, course_id, notice_id):
     context = {}
 
     user = request.user
+    if not check_if_authenticated(request):
+        return redirect('accounts:login')
     course = get_object_or_404(Course, id=course_id)
     notice = get_object_or_404(Notice, id=notice_id)
     comments = get_notice_comment_list(request, course_id, notice_id)
@@ -198,6 +217,8 @@ def notice_update(request, course_id, notice_id):
     course = get_object_or_404(Course, pk=course_id)
     notice = get_object_or_404(Notice, pk=notice_id)
     user = request.user
+    if not check_if_authenticated(request):
+        return redirect('accounts:login')
 
     if request.user.id is not notice.publisher.id:
         return redirect('lecture:notice_read', course_id, notice_id)
@@ -226,7 +247,9 @@ def notice_update(request, course_id, notice_id):
 
 def notice_delete(request, course_id, notice_id):
     context = {}
-
+    user = request.user
+    if not check_if_authenticated(request):
+        return redirect('accounts:login')
     course = get_object_or_404(Course, id=course_id)
     notice = get_object_or_404(Notice, id=notice_id)
 
@@ -239,6 +262,9 @@ def notice_delete(request, course_id, notice_id):
 
 
 def get_notice_comment_list(request, course_id, notice_id):
+    user = request.user
+    if not check_if_authenticated(request):
+        return redirect('accounts:login')
     notice = get_object_or_404(Notice, id=notice_id)
     comments = NoticeComment.objects.all().filter(notice=notice)
 
@@ -247,6 +273,10 @@ def get_notice_comment_list(request, course_id, notice_id):
 
 def notice_comment_create(request, course_id, notice_id):
     context = {}
+
+    user = request.user
+    if not check_if_authenticated(request):
+        return redirect('accounts:login')
 
     course = get_object_or_404(Course, pk=course_id)
     notice = get_object_or_404(Notice, pk=notice_id)
@@ -271,6 +301,10 @@ def notice_comment_create(request, course_id, notice_id):
 
 def notice_comment_update(request, course_id, notice_id, comment_id):
     context = {}
+
+    user = request.user
+    if not check_if_authenticated(request):
+        return redirect('accounts:login')
 
     course = get_object_or_404(Course, id=course_id)
     notice = get_object_or_404(Notice, id=notice_id)
@@ -307,6 +341,10 @@ def notice_comment_update(request, course_id, notice_id, comment_id):
 def notice_comment_delete(request, course_id, notice_id, comment_id):
     context = {}
 
+    user = request.user
+    if not check_if_authenticated(request):
+        return redirect('accounts:login')
+
     course = get_object_or_404(Course, id=course_id)
     notice = get_object_or_404(Notice, id=notice_id)
     comment = get_object_or_404(NoticeComment, id=comment_id)
@@ -318,8 +356,9 @@ def notice_comment_delete(request, course_id, notice_id, comment_id):
 def check_if_authenticated(request):
     if request.user.is_authenticated is False:
         messages.error(request, "로그인 하셔야 합니다.")
-        context = {}
-        return render(request, 'global/error_page.html', context=context)
+        return False
+    else:
+        return True
 
 
 def get_students_courses(student):

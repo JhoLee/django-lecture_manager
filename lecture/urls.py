@@ -19,11 +19,11 @@ urlpatterns = [
     path('<int:course_id>/notice/<int:notice_id>/update/', views.notice_update, name='notice_update'),
     path('<int:course_id>/notice/<int:notice_id>/delete/', views.notice_delete, name='notice_delete'),
 
-    path('<int:course_id>/notice/<int:notice_id>/comment/create', views.notice_comment_create,
+    path('<int:course_id>/notice/<int:notice_id>/comment/create/', views.notice_comment_create,
          name='notice_comment_create'),
-    path('<int:course_id>/notice/<int:notice_id>/comment/<int:comment_id>/update', views.notice_comment_update,
+    path('<int:course_id>/notice/<int:notice_id>/comment/<int:comment_id>/update/', views.notice_comment_update,
          name='notice_comment_update'),
-    path('<int:course_id>/notice/<int:notice_id>/comment/<int:comment_id>/delete', views.notice_comment_delete,
+    path('<int:course_id>/notice/<int:notice_id>/comment/<int:comment_id>/delete/', views.notice_comment_delete,
          name='notice_comment_delete'),
 
 ]
