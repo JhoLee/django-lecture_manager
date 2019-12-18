@@ -82,7 +82,7 @@ def notice_index(request, course_id):
     notices = Notice.objects.all().filter(course=course)
     context['notices'] = notices
 
-    return render(request, 'lecture/notice_index.html', context)
+    return render(request, 'lecture/notice/notice_index.html', context)
 
 
 def notice_create(request, course_id):
@@ -103,7 +103,7 @@ def notice_create(request, course_id):
     else:
         notice_form = NoticeForm()
         context['notice_form'] = notice_form
-        return render(request, 'lecture/notice_create.html', context)
+        return render(request, 'lecture/notice/notice_create.html', context)
 
 
 def notice_read(request, course_id, notice_id):
@@ -119,7 +119,7 @@ def notice_read(request, course_id, notice_id):
     context["notice"] = notice
     context["comments"] = comments
 
-    return render(request, 'lecture/notice_read.html', context=context)
+    return render(request, 'lecture/notice/notice_read.html', context=context)
 
 
 def notice_update(request, course_id, notice_id):
@@ -157,7 +157,7 @@ def notice_update(request, course_id, notice_id):
 
     context["notice_update_form"] = notice_update_form
 
-    return render(request, 'lecture/notice_update.html', context=context)
+    return render(request, 'lecture/notice/notice_update.html', context=context)
 
 
 def notice_delete(request, course_id, notice_id):
@@ -202,7 +202,7 @@ def notice_comment_create(request, course_id, notice_id):
     else:
         comment_form = NoticeCommentForm()
         context['comment_form'] = comment_form
-        return render(request, 'lecture/notice_comment_create.html', context)
+        return render(request, 'lecture/notice/notice_comment_create.html', context)
 
 
 def notice_comment_update(request, course_id, notice_id, comment_id):
@@ -237,7 +237,7 @@ def notice_comment_update(request, course_id, notice_id, comment_id):
         form = NoticeCommentForm(instance=comment)
 
     context['comment_update_form'] = form
-    return render(request, 'lecture/notice_comment_update.html', context=context)
+    return render(request, 'lecture/notice/notice_comment_update.html', context=context)
 
 
 def notice_comment_delete(request, course_id, notice_id, comment_id):
