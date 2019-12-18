@@ -17,9 +17,7 @@ class CourseForm(forms.ModelForm):
         self.fields['description'].label = "강의개요"
 
     def save(self, commit=True):
-        self.instance = Course(**self.cleaned_data)
-        if commit:
-            self.instance.save()
+        self.instance = super().save(commit=commit)
         return self.instance
 
 

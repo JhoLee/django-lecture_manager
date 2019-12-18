@@ -1,16 +1,11 @@
 from django.contrib import messages
-from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
-
-# Create your views here.
-from django.urls import reverse
 
 from lecture.forms import CourseForm, NoticeForm, NoticeCommentForm
 from lecture.models import Course, Enrollment, Notice, NoticeComment
 
 
 def index(request):
-    # TODO
     user = request.user
     context = {}
     if check_role(user) == "교수":
@@ -76,6 +71,34 @@ def course_create(request):
     return render(request, 'lecture/course_create.html', context)
 
 
+def course_update(request, course_id):
+    context = {}
+
+    course = get_object_or_404(Course, pk=course_id)
+    user = request.user
+
+    if request.user.id is not course.professor.id:
+        return redirect('lecture:course_index', course_id)
+
+    context['course'] = course
+    context['user'] = user
+
+    if request.method == "POST":
+        course_form = CourseForm(request.POST or None, instance=course)
+
+        if course_form.is_valid():
+            new_course = course_form.save(commit=False)
+            new_course.professor = user
+            new_course.save()
+
+            return redirect('lecture:course_index', course.id)
+    else:
+        course_form = CourseForm(instance=course)
+
+    context['course_form'] = course_form
+    return render(request, 'lecture/course_update.html', context)
+
+
 def course_join(request, course_id):
     context = {}
     user = request.user
@@ -98,8 +121,6 @@ def course_join(request, course_id):
         context['course'] = course
 
         return render(request, 'lecture/course_join.html', context)
-
-    pass
 
 
 def notice_index(request, course_id):
@@ -172,15 +193,9 @@ def notice_update(request, course_id, notice_id):
             new_notice = notice_update_form.save(commit=False)
             new_notice.course = course
             new_notice.publisher = request.user
-
             new_notice.save()
 
-            # notice = notice_update_form.save(commit=False)
-            # notice.publisher = request.user
-            # notice.course = _notice.course
-            # notice.save()
-
-            return redirect('lecture:notice_read', course.id, notice.id)
+            return redirect('lecture:notice_read', course.id, new_notice.id)
     else:
         notice_update_form = NoticeForm(instance=notice)
 
