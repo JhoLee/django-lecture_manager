@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 
-from .models import Course, Notice, Enrollment
+from .models import Course, Notice, Enrollment, NoticeComment
 
 
 class CourseForm(forms.ModelForm):
@@ -27,7 +27,6 @@ class NoticeForm(forms.ModelForm):
     class Meta:
         model = Notice
         fields = ['title', 'content', 'file', ]
-        widgets = {"file": forms.FileInput(attrs={'id': 'files', 'required': True, 'multiple': True})}
 
     def __init__(self, *args, **kwargs):
         super(NoticeForm, self).__init__(*args, **kwargs)
@@ -35,8 +34,26 @@ class NoticeForm(forms.ModelForm):
         self.fields['content'].label = "내용"
         self.fields['file'].label = "첨부파일"
 
+        self.fields['file'].required = False
+
     def save(self, commit=True):
-        self.instance = Notice(**self.cleaned_data)
-        if commit:
-            self.instance.save()
+        self.instance = super().save(commit=commit)
+        return self.instance
+
+
+class NoticeCommentForm(forms.ModelForm):
+    class Meta:
+        model = NoticeComment
+        fields = ['title', 'content', 'file', ]
+
+    def __init__(self, *args, **kwargs):
+        super(NoticeCommentForm, self).__init__(*args, **kwargs)
+        self.fields['title'].label = "제목"
+        self.fields['content'].label = "내용"
+        self.fields['file'].label = "첨부파일"
+
+        self.fields['file'].required = False
+
+    def save(self, commit=True):
+        self.instance = super().save(commit=commit)
         return self.instance

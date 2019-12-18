@@ -11,11 +11,16 @@ class SignupForm(auth_forms.UserCreationForm):
 
     name = forms.CharField(help_text='실명으로 적어주세요.', max_length=100, label='이름')
     id_number = forms.IntegerField(help_text='숫자로만 적어주세요.', label='직번/학번')
-    # role = forms.ModelChoiceField(help_text='선택해주세요.', queryset=Role.objects.all(), label='신분', initial=0)
+
+    ROLE_CHOICES = (
+        ("0", '학생'),
+        ('1', '교수'),
+    )
+    role = forms.ChoiceField(help_text='선택해주세요.', choices=ROLE_CHOICES, label='신분', initial=0)
 
     class Meta:
         model = User
-        fields = ('username', 'password1', 'password2', 'name',  'id_number',)
+        fields = ('username', 'password1', 'password2', 'name', 'id_number', 'role',)
 
     def __init__(self, *args, **kwargs):
         super(auth_forms.UserCreationForm, self).__init__(*args, **kwargs)

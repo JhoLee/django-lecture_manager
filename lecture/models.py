@@ -43,18 +43,18 @@ class Enrollment(models.Model):
 
 
 def notice_upload_path(self, filename):
-    return 'uploads/{0}/notice/{1}/'.format(self.course.name, filename)
+    return 'uploads/{0}/notice/{1}/{2}/'.format(self.course.name, self.id, filename)
 
 
 class Notice(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    publisher = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default='unknown user')
+    publisher = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     content = models.TextField()
     file = models.FileField(
         upload_to=notice_upload_path,
         blank=True,
-        null=True
+        null=True,
 
     )
     pub_dt = models.DateTimeField(auto_now_add=True)
@@ -69,6 +69,9 @@ class Notice(models.Model):
 
         )
 
+    def file_name(self):
+        return str(self.file.name).split('/')[-1]
+
 
 @receiver(models.signals.post_delete, sender=Notice)
 def auto_delete_on_delete_notice(sender, instance, **kwargs):
@@ -79,6 +82,49 @@ def auto_delete_on_delete_notice(sender, instance, **kwargs):
 
 @receiver(models.signals.pre_save, sender=Notice)
 def auto_delete_on_change_notice(sender, instance, **kwargs):
+    if not instance.pk:
+        return False
+    try:
+        old_file = sender.objects.get(pk=instance.pk).file
+    except sender.DoesNotExist:
+        return False
+
+    new_file = instance.file
+    if not old_file == new_file:
+        if os.path.isfile(old_file.path):
+            os.remove(old_file.path)
+
+
+def notice_comment_upload_path(self, filename):
+    return 'uploads/{0}/comment/{1}/{2}/'.format(self.notice.course.name, self.notice.id, filename)
+
+
+class NoticeComment(models.Model):
+    notice = models.ForeignKey(Notice, on_delete=models.CASCADE)
+    writer = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default='unknown_ user')
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    file = models.FileField(
+        upload_to=notice_comment_upload_path,
+        blank=True,
+        null=True
+    )
+    pub_dt = models.DateTimeField(auto_now_add=True)
+    edit_dt = models.DateTimeField(auto_now=True)
+
+    def file_name(self):
+        return str(self.file.name).split('/')[-1]
+
+
+@receiver(models.signals.post_delete, sender=NoticeComment)
+def auto_delete_on_delete_notice_comment(sender, instance, **kwargs):
+    if instance.file:
+        if os.path.isfile(instance.file.path):
+            os.remove(instance.file.path)
+
+
+@receiver(models.signals.pre_save, sender=NoticeComment)
+def auto_delete_on_change_notice_comment(sender, instance, **kwargs):
     if not instance.pk:
         return False
     try:

@@ -6,14 +6,15 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'lecture:index' %}">Home</a></li>
             <li class="breadcrumb-item"><a href="{% url 'lecture:course_index' course.id %}">강의 홈</a></li>
-            <li class="breadcrumb-item active" aria-current="page">강의 게시글 수정</li>
+            <li class="breadcrumb-item"><a href="{% url 'lecture:notice_read' course.id notice.id %}">댓글 조회</a></li>
+            <li class="breadcrumb-item active" aria-current="page">댓글 등록</li>
         </ol>
     </nav>
 
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="jumbotron">
-            {% for field in notice_update_form %}
+            {% for field in comment_form %}
                 <div class="form-group">
                     <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                     {{ field.as_widget }}
@@ -22,10 +23,9 @@
             {% endfor %}
         </div>
 
-        <input type="submit" value="수정" class="btn btn-success btn-lg btn-block">
+        <input type="submit" value="등록" class="btn btn-success btn-lg btn-block">
         <a href="{% url 'lecture:notice_read' course.id notice.id %}"
            class="btn btn-outline-dark btn-lg btn-block">취소</a>
-
 
     </form>
 

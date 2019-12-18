@@ -4,9 +4,8 @@
 
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'lecture:index' %}">강의 홈</a></li>
-            <li class="breadcrumb-item active" aria-current="page">강의 게시판</li>
+            <li class="breadcrumb-item"><a href="{% url 'lecture:index' %}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">강의 홈</li>
         </ol>
     </nav>
 
@@ -16,8 +15,8 @@
             {#            <a href="{% url 'lecture:course_update'   %}" class="btn btn-outline-warning btn-sm ">수정</a>#}
             {# 수정으로 바꿔야.. url #}
         {% endif %}
-        <h5 class="text-muted">{{ course.professor }} 교수</h5>
-        <h6 class="text-muted">({{ course.id }})</h6>
+        <h5 class="text-muted">{{ course.professor.profile.name }} 교수</h5>
+        <h6 class="text-muted">강의번호: {{ course.id }}</h6>
         <hr class="my-4">
         <dl class="row card-text">
             <dt class="col-3 col-lg-2">년도</dt>
@@ -34,7 +33,7 @@
 
     <div id="notice-list-group" class="list-group">
         <a href="{% url 'lecture:notice_index' course.id %}" class="list-group-item list-group-item-action active">
-            <h3 class="align-items-center">강의</h3>
+            <h3 class="align-items-center">공지</h3>
         </a>
         {% if notices %}
             {% for notice in notices %}
@@ -56,7 +55,7 @@
         {% endif %}
     {% if course.professor.id == user.id %}
         <a href="{% url 'lecture:notice_create' course.id %}"
-           class="btn btn-outline-success btn-lg btn-block">강의 게시물 등록</a>
+           class="btn btn-outline-success btn-lg btn-block">공지 게시물 등록</a>
     {% endif %}
 
 

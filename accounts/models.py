@@ -15,12 +15,12 @@ class Profile(models.Model):
 
     role = models.IntegerField(choices=Role.choices, default=0)
 
-    def __str__(self):
-        return "{name}-{role}({id})".format(
-            id=self.user.username,
-            role=self.get_role_display(),
-            name=self.name,
-        )
+    # def __str__(self):
+    #     return "{name}-{role}({id})".format(
+    #         id=self.user.username,
+    #         role=self.get_role_display(),
+    #         name=self.name,
+    #     )
     # def __str__(self):
     #     return "{role}/{id}/{name}-{user}".format(
     #         role=self.role,

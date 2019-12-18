@@ -105,7 +105,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Redirect after login
-LOGIN_REDIRECT_URL = 'accounts/profile/'
+LOGIN_REDIRECT_URL = 'lecture/'
 
 # Login URL
 LOGIN_URL = 'accounts/login'

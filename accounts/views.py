@@ -13,7 +13,7 @@ def signin(request):
     if request.user.is_authenticated:
         messages.error(request, "이미 로그인 됨")
         context = {}
-        return render(request, 'global/error_page.html', context=context)
+        return redirect('accounts:view_profile')
     if request.method == "POST":
         form = SigninForm(request.POST)
         username = request.POST['username']
