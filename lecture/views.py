@@ -43,6 +43,8 @@ def course_index(request, course_id):
         if not enrollment.filter(student=user).exists():
             return redirect('lecture:course_join', course_id)
 
+    if check_role(user) == "교수" and course.professor.id is not user.id:
+        return redirect('lecture:index')
     try:
         notices = Notice.objects.all().filter(course=course)
         notices = notices.order_by('-pub_dt')[:3]
