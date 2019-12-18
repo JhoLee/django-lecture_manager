@@ -32,6 +32,7 @@
                 <h5>등록된 게시물이 없습니다...</h5>
             </div>
         {% endif %}
+    <hr class="my-4">
     {% if course.professor.id == user.id %}
         <a href="{% url 'lecture:notice_create' course.id %}"
            class="btn btn-outline-success btn-lg btn-block">공지 게시물 등록</a>
