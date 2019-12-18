@@ -18,6 +18,8 @@ def index(request):
         my_courses = get_professors_courses(user)
         context["my_courses"] = my_courses
 
+        context['course_count'] = len(my_courses)
+
         return render(request, 'lecture/index_professor.html', context)
     elif check_role(user) == "학생":
 
@@ -39,18 +41,21 @@ def course_index(request, course_id):
     context = {}
     user = request.user
     course = get_object_or_404(Course, pk=course_id)
+    context["course"] = course
 
-    if check_role(user) == "교수":
-        context["course"] = course
-        try:
-            notices = Notice.objects.all().filter(course=course)
-            notices = notices.order_by('-pub_dt')[:3]
-        except Notice.DoesNotExist:
-            notices = []
-        context["notices"] = notices
+    if check_role(user) == "학생":
+        enrollment = Enrollment.objects.filter(course=course)
+        if not enrollment.filter(student=user).exists():
+            return redirect('lecture:course_join', course_id)
 
-        return render(request, 'lecture/course_index.html', context=context)
-    return render(request, 'global/error_page.html', context=context)
+    try:
+        notices = Notice.objects.all().filter(course=course)
+        notices = notices.order_by('-pub_dt')[:3]
+    except Notice.DoesNotExist:
+        notices = []
+    context["notices"] = notices
+
+    return render(request, 'lecture/course_index.html', context=context)
 
 
 def course_create(request):
@@ -74,6 +79,9 @@ def course_create(request):
 def course_join(request, course_id):
     context = {}
     user = request.user
+
+    if check_role(user) == "교수":
+        return redirect('lecture:index')
     is_enrolled = Enrollment.objects.filter(student=user, course=course_id).exists()
     if is_enrolled:
         context['is_enrolled'] = True
@@ -100,6 +108,7 @@ def notice_index(request, course_id):
     context['course'] = course
     user = request.user
     notices = Notice.objects.all().filter(course=course)
+
     context['notices'] = notices
 
     return render(request, 'lecture/notice/notice_index.html', context)

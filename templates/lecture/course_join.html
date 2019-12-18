@@ -15,7 +15,7 @@
     {% else %}
         <form method="POST">
             {% csrf_token %}
-            <p>정말 참여하시겠습니까?</p>
+            <p>강의에 참여하시겠습니까?</p>
             <div class="jumbotron">
                 <h2> {{ course.name }}</h2>
                 {% if course.professor.id == user.id %}
