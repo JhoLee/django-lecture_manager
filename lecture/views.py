@@ -23,11 +23,12 @@ def index(request):
 
         # get course list
         my_courses = get_students_courses(user)
+
+        course_count = len(my_courses)
         context["my_courses"] = my_courses
+        context["course_count"] = course_count
 
         return render(request, 'lecture/index_student.html', context)
-
-        dummy_lecture_list = []
 
     else:
         message = 'unknown'
@@ -71,6 +72,25 @@ def course_create(request):
 
 
 def course_join(request, course_id):
+    context = {}
+    user = request.user
+    is_enrolled = Enrollment.objects.filter(student=user, course=course_id).exists()
+    if is_enrolled:
+        context['is_enrolled'] = True
+        return render(request, 'lecture/course_join.html', context)
+    else:
+        if request.method == "POST":
+            _id = request.POST['_id']
+            course = get_object_or_404(Course, pk=_id)
+            Enrollment.objects.create(course=course, student=user)
+
+            return redirect('lecture:course_index', _id)
+        context['is_enrolled'] = False
+        course = get_object_or_404(Course, pk=course_id)
+        context['course'] = course
+
+        return render(request, 'lecture/course_join.html', context)
+
     pass
 
 
