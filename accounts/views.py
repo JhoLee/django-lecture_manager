@@ -109,7 +109,6 @@ def update_profile(request):
         context = {}
         return redirect('accounts:login')
     else:
-        # TOdo: Add password validation
         user = request.user
         profile = user.profile
         initial_data = {
@@ -132,7 +131,6 @@ def update_profile(request):
 
 
 def change_password(request):
-    # todo: Custom password change form's style
     if not request.user.is_authenticated:
         messages.error(request, "로그인 하셔야 합니다.")
         context = {}

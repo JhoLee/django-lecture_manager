@@ -43,7 +43,6 @@
         <hr class="my-4">
         <br>
         <div class="d-flex">
-            {# TODO: modify url #}
             <a href="{% url 'lecture:notice_update' course.id notice.id %}"
                class="btn btn-outline-warning btn-lg col-6">수정</a>
             <a href="{% url 'lecture:notice_delete' course.id notice.id %}" class="btn btn-outline-danger btn-lg col-6">삭제</a>
