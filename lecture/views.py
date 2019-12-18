@@ -50,7 +50,7 @@ def course_index(request, course_id):
         notices = []
     context["notices"] = notices
 
-    return render(request, 'lecture/course_index.html', context=context)
+    return render(request, 'lecture/course/course_index.html', context=context)
 
 
 def course_create(request):
@@ -68,7 +68,7 @@ def course_create(request):
     else:
         course_form = CourseForm()
         context['course_form'] = course_form
-    return render(request, 'lecture/course_create.html', context)
+    return render(request, 'lecture/course/course_create.html', context)
 
 
 def course_update(request, course_id):
@@ -96,7 +96,7 @@ def course_update(request, course_id):
         course_form = CourseForm(instance=course)
 
     context['course_form'] = course_form
-    return render(request, 'lecture/course_update.html', context)
+    return render(request, 'lecture/course/course_update.html', context)
 
 
 def course_join(request, course_id):
@@ -108,7 +108,7 @@ def course_join(request, course_id):
     is_enrolled = Enrollment.objects.filter(student=user, course=course_id).exists()
     if is_enrolled:
         context['is_enrolled'] = True
-        return render(request, 'lecture/course_join.html', context)
+        return render(request, 'lecture/course/course_join.html', context)
     else:
         if request.method == "POST":
             _id = request.POST['_id']
@@ -120,7 +120,7 @@ def course_join(request, course_id):
         course = get_object_or_404(Course, pk=course_id)
         context['course'] = course
 
-        return render(request, 'lecture/course_join.html', context)
+        return render(request, 'lecture/course/course_join.html', context)
 
 
 def notice_index(request, course_id):
