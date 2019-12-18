@@ -4,19 +4,23 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
-class Role(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-
-    def __str__(self):
-        return self.name
-
-
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     id_number = models.IntegerField(blank=True, null=True)
-    name = models.CharField(blank=True, max_length=100)
-    role = models.ForeignKey(Role,  on_delete=models.SET_NULL, null=True)
+    name = models.CharField(default="unknown_user", max_length=100)
 
+    class Role(models.IntegerChoices):
+        STUDENT = 0, '학생'
+        PROFESSOR = 1, '교수'
+
+    role = models.IntegerField(choices=Role.choices, default=0)
+
+    # def __str__(self):
+    #     return "{name}-{role}({id})".format(
+    #         id=self.user.username,
+    #         role=self.get_role_display(),
+    #         name=self.name,
+    #     )
     # def __str__(self):
     #     return "{role}/{id}/{name}-{user}".format(
     #         role=self.role,

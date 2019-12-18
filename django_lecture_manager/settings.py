@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'accounts',
+    'lecture',
 ]
 
 MIDDLEWARE = [
@@ -104,7 +105,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Redirect after login
-LOGIN_REDIRECT_URL = 'accounts/profile/'
+LOGIN_REDIRECT_URL = 'lecture/'
 
 # Login URL
 LOGIN_URL = 'accounts/login'
@@ -137,6 +138,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'staticfiles')
 ]
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # for bootstrap error message
 MESSAGE_TAGS = {messages_constants.ERROR: 'danger'}

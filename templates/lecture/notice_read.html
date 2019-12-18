@@ -1,0 +1,92 @@
+{% extends 'lecture/base.html' %}
+
+{% block container_content %}
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'lecture:index' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'lecture:course_index' course.id %}">강의 홈</a></li>
+            <li class="breadcrumb-item active" aria-current="page">강의 게시글 보기</li>
+        </ol>
+    </nav>
+
+    <h2 class="display-2">{{ notice.title }}</h2>
+    <small>작성자: {{ notice.publisher.profile.name }}({{ notice.publisher.profile.get_role_display }})</small>
+    <hr class="my-4">
+
+    <dl class="row">
+        <dt class="col-3 col-sm-2">등록일시</dt>
+        <dd class="col-9 col-sm-4">{{ notice.pub_dt }}</dd>
+
+        <dt class="col-3 col-sm-2">수정일시</dt>
+        <dd class="col-9 col-sm-4">{{ notice.edit_dt }}</dd>
+
+
+        <dt class="col-3 col-md-2">첨부파일</dt>
+        <dd class="col-9 col-md-10">
+            <dl class="row">
+                {% if notice.file %}
+                    <a href="{{ notice.file.url }}">{{ notice.file_name }}</a>
+
+                {% endif %}
+            </dl>
+        </dd>
+    </dl>
+
+    <hr class="my-4">
+
+    {{ notice.content }}
+
+
+
+    {% if notice.publisher_id == user.id %}
+        <hr class="my-4">
+        <br>
+        <div class="d-flex">
+            {# TODO: modify url #}
+            <a href="{% url 'lecture:notice_update' course.id notice.id %}"
+               class="btn btn-outline-warning btn-lg col-6">수정</a>
+            <a href="{% url 'lecture:notice_delete' course.id notice.id %}" class="btn btn-outline-danger btn-lg col-6">삭제</a>
+        </div>
+    {% endif %}
+
+    <hr class="my-4">
+
+    <div id="notice-comment-list-group" class="list-group">
+        <div class="list-group-item list-group-item-action active">
+            <h3 class="align-items-center">댓글</h3>
+        </div>
+        {% if comments %}
+            {% for comment in comments %}
+                <div class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        {% if comment.writer.id == user.id %}
+                            <h5 class="mb-1">{{ comment.title }}
+                                <a href="{% url 'lecture:notice_comment_update' course.id notice.id comment.id %}">(수정)</a>
+                                <a href="{% url 'lecture:notice_comment_delete' course.id notice.id comment.id %}">(삭제)</a>
+                            </h5>
+                        {% else %}
+                            <h5 class="mb-1">{{ comment.title }}</h5>
+                        {% endif %}
+                        <small>{{ comment.pub_dt | timesince }} 이전</small>
+
+                    </div>
+                    <p class="mb-1"><a href="{{ comment.file.name }}">{{ comment.file_name }}</a></p>
+                    <p class="mb-1">{{ comment.content }}</p>
+
+                    <small>{{ comment.writer.profile.name }}({{ comment.writer.profile.get_role_display }})</small>
+                </div>
+            {% endfor %}
+            </div>
+        {% else %}
+            <div class="list-group-item list-group-item-action">
+                <h5>등록된 댓글이 없습니다...</h5>
+            </div>
+        {% endif %}
+
+    <hr class="my-4">
+
+    <a href="{% url 'lecture:notice_comment_create' course.id notice.id %}"
+       class="btn btn-outline-dark btn-lg btn-block">댓글 등록</a>
+
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'lecture/base.html' %}
+{% block container_content %}
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'lecture:index' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'lecture:course_index' course.id %}">강의 홈</a></li>
+            <li class="breadcrumb-item active" aria-current="page">공지 게시물 생성</li>
+        </ol>
+    </nav>
+
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ notice_form.as_p }}
+
+        <input type="submit" value="등록" class="btn btn-success btn-lg btn-block">
+        <a href="{% url 'lecture:notice_index' course.id %}" class="btn btn-outline-danger btn-lg btn-block">취소</a>
+    </form>
+
+{% endblock %}
