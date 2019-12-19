@@ -70,7 +70,7 @@
                         <small>{{ comment.pub_dt | timesince }} 이전</small>
 
                     </div>
-                    <p class="mb-1"><a href="{{ comment.file.name }}">{{ comment.file_name }}</a></p>
+                    <p class="mb-1"><a href="{{ comment.file.url }}">{{ comment.file_name }}</a></p>
                     <p class="mb-1">{{ comment.content }}</p>
 
                     <small>{{ comment.writer.profile.name }}({{ comment.writer.profile.get_role_display }})</small>
